@@ -65,13 +65,13 @@ export default {
   },
   computed: {
     token () {
-      // return this.auth.user.token
+      return this.$store.getters.jsonWebToken
     },
     authenticated () {
-      // return this.auth.authenticated()
+      return this.$store.getters.isAuthenticated
     },
     userEmail () {
-      // return this.auth.user.email
+      return this.$store.getters.userEmail
     }
   },
   data () {

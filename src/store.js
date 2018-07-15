@@ -28,7 +28,7 @@ export default new Vuex.Store({
       }, expirationTime * 1000)
     },
     login ({ commit, dispatch }, credentials) {
-      axios.post('/login', { email: credentials.email, password: credentials.password })
+      axios.post('api/login', { email: credentials.email, password: credentials.password })
         .then((response) => {
           const now = new Date()
           const expirationDate = new Date(now.getTime() + (response.data.expires_in * 1000))
@@ -106,6 +106,12 @@ export default new Vuex.Store({
   getters: {
     isAuthenticated (state) {
       return state.jsonWebToken !== null
+    },
+    jsonWebToken (state) {
+      return state.jsonWebToken
+    },
+    userEmail (state) {
+      return state.email
     }
   }
 })
