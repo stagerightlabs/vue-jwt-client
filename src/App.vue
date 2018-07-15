@@ -12,13 +12,13 @@
       <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
         <div class="text-sm lg:flex-grow">
           <div v-if="authenticated">
-            <router-link :to="{ name: 'Dashboard' }" class="block mt-4 lg:inline-block lg:mt-0 text-purple-lighter hover:text-white mr-4">
+            <router-link :to="{ name: 'Dashboard' }" class="block mt-4 lg:inline-block lg:mt-0 text-purple-lightest no-underline hover:text-white mr-4">
               Dashboard
             </router-link>
-            <router-link :to="{name: 'Secrets'}" class="block mt-4 lg:inline-block lg:mt-0 text-purple-lighter hover:text-white mr-4">
+            <router-link :to="{name: 'Secrets'}" class="block mt-4 lg:inline-block lg:mt-0 text-purple-lightest no-underline hover:text-white mr-4">
               Secrets
             </router-link>
-            <a href="https://tailwindcss.com" class="block mt-4 lg:inline-block lg:mt-0 text-purple-lighter hover:text-white" target="blank">
+            <a href="https://tailwindcss.com" class="block mt-4 lg:inline-block lg:mt-0 text-purple-lightest no-underline hover:text-white" target="blank">
               Tailwind CSS
             </a>
           </div>
@@ -39,7 +39,7 @@
         </div>
         <div v-else>
           <span class="text-white">{{ userEmail }}</span>
-          <button class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 lg:mt-0" @click="logout">Log Out</button>
+          <button class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 ml-2 lg:mt-0" @click="logout">Log Out</button>
         </div>
       </div>
     </nav>
@@ -47,7 +47,7 @@
       <router-view/>
     </div>
     <div class="p-4 bg-grey-lighter">
-      <h5>auth.token</h5>
+      <h5 class="mb-1">JSON Web Token</h5>
       <pre class="whitespace-pre-wrap break-words">{{ token }}</pre>
     </div>
     <flash-stack></flash-stack>
