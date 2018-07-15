@@ -97,14 +97,6 @@ export default {
           window.flash('Your session has been terminated.', 'success')
         })
     }
-  },
-  created () {
-    // if (authority.check()) {
-    //   this.$router.push({name: 'Dashboard'})
-    // }
-    // window.events.$on('authorized', (jwt) => {
-    //   // authority.login(jwt)
-    // })
   }
 }
 </script>
