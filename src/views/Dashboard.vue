@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Dashboard</h1>
-    <p class="text-center">Hello, {{ email }}.</p>
+    <p class="text-center">Hello, {{ userEmail }}.</p>
     <p class="text-center">You are logged in.</p>
     <p class="w-full text-center my-8">
       <a
@@ -16,6 +16,7 @@
 
 <script>
 import bus from '@/bus'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -24,9 +25,9 @@ export default {
     }
   },
   computed: {
-    email () {
-      return this.$store.getters.userEmail
-    }
+    ...mapGetters([
+      'userEmail'
+    ])
   },
   methods: {
     alert (message, level) {

@@ -124,7 +124,7 @@ export default new Vuex.Store({
       return state.jsonWebToken
     },
     userEmail (state) {
-      return state.email
+      return state.userEmail
     },
     hasValidationError: (state) => (input) => {
       return Object.prototype.hasOwnProperty.call(state.formErrors, input)
