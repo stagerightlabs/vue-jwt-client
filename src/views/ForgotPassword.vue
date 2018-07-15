@@ -9,7 +9,12 @@
           </label>
         </div>
         <div class="md:w-2/3">
-          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter focus:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-full-name" type="email" placeholder="jane@example.com" v-model="email">
+          <input
+            class="bg-grey-lighter appearance-none border-2 border-grey-lighter focus:border-purple rounded w-full py-2 px-4 text-grey-darker"
+            id="inline-full-name"
+            type="email"
+            v-model="email"
+          >
           <p class="text-red text-sm mt-1" v-if="hasError('email')">{{ getErrorMessage('email') }}</p>
         </div>
       </div>
@@ -34,7 +39,7 @@ export default {
   data () {
     return {
       email: '',
-      apiUrl: process.env.API_URL
+      errors: {}
     }
   },
   methods: {
@@ -62,6 +67,15 @@ export default {
           self.$router.push({name: 'Login'})
           window.flash('A reset link has sent to your email account.', 'success')
         })
+    },
+    hasError (key) {
+      return Object.prototype.hasOwnProperty.call(this.errors, key)
+    },
+    getErrorMessage (key) {
+      return this.hasError(key) ? this.errors[key][0] : null
+    },
+    clearErrors () {
+      this.errors = {}
     }
   }
 }

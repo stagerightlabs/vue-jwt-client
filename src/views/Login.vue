@@ -9,7 +9,13 @@
           </label>
         </div>
         <div class="md:w-2/3">
-          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter focus:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-full-name" type="email" placeholder="jane@example.com" v-model="credentials.email">
+          <input
+            class="bg-grey-lighter appearance-none border-2 border-grey-lighter focus:border-purple rounded w-full py-2 px-4 text-grey-darker"
+            id="inline-full-name"
+            type="email"
+            v-model="credentials.email"
+          >
+          <p class="text-red text-sm mt-1" v-if="hasError('email')">{{ getErrorMessage('email') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline mb-6">
@@ -19,7 +25,12 @@
           </label>
         </div>
         <div class="md:w-2/3">
-          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter focus:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-username" type="password" placeholder="******************" v-model="credentials.password">
+          <input
+            class="bg-grey-lighter appearance-none border-2 border-grey-lighter focus:border-purple rounded w-full py-2 px-4 text-grey-darker"
+            id="inline-username"
+            type="password"
+            v-model="credentials.password"
+          >
         </div>
       </div>
       <div class="md:flex md:items-baseline">
@@ -31,7 +42,7 @@
             @click.prevent="login">Login
           </button>
           <button
-            class="bg-transparent hover:bg-purple text-purple-dark font-semibold hover:text-white py-2 px-4 border border-purple hover:border-transparent rounded"
+            class="bg-transparent hover:bg-purple text-purple-dark font-semibold hover:text-white py-2 px-4 ml-2 border border-purple hover:border-transparent rounded"
             type="button"
             @click.prevent="forgot">Forgot Password
           </button>
@@ -50,16 +61,32 @@ export default {
         email: '',
         password: ''
       },
-      apiUrl: process.env.API_URL
+      errors: {}
     }
   },
   methods: {
-
-  },
-  resetForm () {
-    this.credentials = {
-      email: '',
-      password: ''
+    forgot () {
+      this.$router.push({ name: 'ForgotPassword' })
+    },
+    login () {
+      this.clearErrors()
+      this.$store.dispatch('login', this.credentials)
+    },
+    resetForm () {
+      this.credentials = {
+        email: '',
+        password: ''
+      }
+      this.clearErrors()
+    },
+    hasError (key) {
+      return Object.prototype.hasOwnProperty.call(this.errors, key)
+    },
+    getErrorMessage (key) {
+      return this.hasError(key) ? this.errors[key][0] : null
+    },
+    clearErrors () {
+      this.errors = {}
     }
   }
 }

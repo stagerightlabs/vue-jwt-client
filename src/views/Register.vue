@@ -9,7 +9,8 @@
           </label>
         </div>
         <div class="md:w-2/3">
-          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-full-name" type="text" placeholder="Jane Doe" v-model="registration.name">
+          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-full-name" type="text" v-model="registration.name">
+          <p class="text-red text-sm mt-1" v-if="hasError('name')">{{ getErrorMessage('name') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline mb-6">
@@ -19,7 +20,8 @@
           </label>
         </div>
         <div class="md:w-2/3">
-          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-full-name" type="email" placeholder="jane@example.com" v-model="registration.email">
+          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-full-name" type="email" v-model="registration.email">
+          <p class="text-red text-sm mt-1" v-if="hasError('email')">{{ getErrorMessage('email') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline mb-6">
@@ -29,7 +31,8 @@
           </label>
         </div>
         <div class="md:w-2/3">
-          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-username" type="password" placeholder="******************" v-model="registration.password">
+          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-username" type="password" v-model="registration.password">
+          <p class="text-red text-sm mt-1" v-if="hasError('password')">{{ getErrorMessage('password') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline mb-6">
@@ -39,7 +42,7 @@
           </label>
         </div>
         <div class="md:w-2/3">
-          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-username" type="password" placeholder="******************" v-model="registration.password_confirmation">
+          <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-username" type="password"   v-model="registration.password_confirmation">
         </div>
       </div>
       <div class="md:flex md:items-baseline">
@@ -68,7 +71,6 @@ export default {
         password: '',
         password_confirmation: ''
       },
-      apiUrl: process.env.API_URL,
       errors: {}
     }
   },
@@ -94,6 +96,15 @@ export default {
         password: '',
         password_confirmation: ''
       }
+    },
+    hasError (key) {
+      return Object.prototype.hasOwnProperty.call(this.errors, key)
+    },
+    getErrorMessage (key) {
+      return this.hasError(key) ? this.errors[key][0] : null
+    },
+    clearErrors () {
+      this.errors = {}
     }
   }
 }
