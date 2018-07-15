@@ -76,18 +76,8 @@ export default {
   },
   methods: {
     register () {
-      axios.post(this.apiUrl + '/api/register', this.registration)
-        .then(response => {
-          window.events.$emit('authorized', response.data)
-          window.events.$emit('flash', 'Registration Successfull', 'success')
-          window.authority.user.email = this.registration.email
-          this.resetForm()
-        })
-        .catch(error => {
-          if (error.response.hasOwnProperty('data')) {
-            this.errors = error.response.data.errors
-          }
-        })
+      this.clearErrors()
+      this.$store.dispatch('register', this.registration)
     },
     resetForm () {
       this.registration = {
