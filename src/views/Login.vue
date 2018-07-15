@@ -15,7 +15,7 @@
             type="email"
             v-model="credentials.email"
           >
-          <p class="text-red text-sm mt-1" v-if="hasError('email')">{{ getErrorMessage('email') }}</p>
+          <p class="text-red text-sm mt-1" v-if="hasValidationError('email')">{{ getValidationError('email') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline mb-6">
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -60,8 +61,7 @@ export default {
       credentials: {
         email: '',
         password: ''
-      },
-      errors: {}
+      }
     }
   },
   methods: {
@@ -69,7 +69,7 @@ export default {
       this.$router.push({ name: 'ForgotPassword' })
     },
     login () {
-      this.clearErrors()
+      this.clearFormErrors()
       this.$store.dispatch('login', this.credentials)
     },
     resetForm () {
@@ -77,17 +77,17 @@ export default {
         email: '',
         password: ''
       }
-      this.clearErrors()
+      this.clearFormErrors()
     },
-    hasError (key) {
-      return Object.prototype.hasOwnProperty.call(this.errors, key)
-    },
-    getErrorMessage (key) {
-      return this.hasError(key) ? this.errors[key][0] : null
-    },
-    clearErrors () {
-      this.errors = {}
-    }
+    ...mapMutations([
+      'clearFormErrors'
+    ])
+  },
+  computed: {
+    ...mapGetters([
+      'hasValidationError',
+      'getValidationError'
+    ])
   }
 }
 </script>

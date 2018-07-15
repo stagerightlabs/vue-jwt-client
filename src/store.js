@@ -55,6 +55,9 @@ export default new Vuex.Store({
           if (Object.prototype.hasOwnProperty.call(error.response.data, 'message')) {
             bus.$emit('flash', error.response.data.message, 'danger')
           }
+          if (Object.prototype.hasOwnProperty.call(error.response.data, 'errors')) {
+            commit('setFormErrors', error.response.data.errors)
+          }
         })
     },
     tryAutoLogin ({ commit }) {
