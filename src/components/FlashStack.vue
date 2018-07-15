@@ -62,7 +62,7 @@ export default {
 }
 </script>
 
-<style lang="css" rel="stylesheet/css">
+<style lang="css" rel="stylesheet/css" scoped>
 .stack-enter-active,
 .stack-leave-active {
   transition: all 1s;
@@ -71,4 +71,98 @@ export default {
   opacity: 0;
   transform: translateX(30px);
 }
+
+#alert-stack {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@media (min-width: 768px) {
+  #alert-stack {
+    width: 32rem;
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    left: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+}
+
+.alert {
+  width: 100%;
+  display: block;
+  padding: 0.5em;
+  margin-top: 0.5em;
+}
+
+@media (min-width: 768px) {
+  .alert {
+    position: relative;
+    padding: 1em;
+    margin-top: 1em;
+    border-radius: .25rem;
+    font-size: 1.125rem;
+  }
+}
+
+.alert.success {
+  background-color: #e3fcec;
+  color: #1f9d55;
+  border: 2px solid #51d88a;
+}
+
+.alert.success a {
+  color: #1f9d55;
+}
+
+.alert.success a:hover {
+  color: #1a4731;
+}
+
+.alert.info {
+  color: #2779bd;
+  background-color: #eff8ff;
+  border: 2px solid #64d5ca;
+}
+
+.alert.info a {
+  color: #2779bd;
+}
+
+.alert.info a:hover {
+  color: #1c3d5a;
+}
+
+.alert.warning {
+  background-color: #fcfbeb;
+  color: #f2d024;
+  border: 2px solid #faad63;
+}
+
+.alert.warning a {
+  color: #f2d024;
+}
+
+.alert.warning a:hover {
+  color: #684f1d;
+}
+
+.alert.danger {
+  background-color: #fcebea;
+  color: #cc1f1a;
+  border: 2px solid #ef5753;
+}
+
+.alert.danger a {
+  color: #cc1f1a;
+}
+
+.alert.danger a:hover {
+  color: #621b18;
+}
+
 </style>
