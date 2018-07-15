@@ -8,9 +8,11 @@ import Dashboard from '@/views/Dashboard.vue'
 import ResetPassword from '@/views/ResetPassword.vue'
 import ForgotPassword from '@/views/ForgotPassword.vue'
 
+import store from '@/store'
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/register',
@@ -37,25 +39,13 @@ export default new Router({
       path: '/',
       name: 'Dashboard',
       component: Dashboard,
-      beforeEnter: (to, from, next) => {
-        if (window.authority.authenticated()) {
-          return next()
-        }
-
-        return next({ name: 'Login' })
-      }
+      meta: { requiresAuth: true }
     },
     {
       path: '/secrets',
       name: 'Secrets',
       component: Secrets,
-      beforeEnter: (to, from, next) => {
-        // if (window.authority.authenticated()) {
-        //   return next()
-        // }
-
-        return next({ name: 'Login' })
-      }
+      meta: { requiresAuth: true }
     },
     {
       path: '*',
@@ -64,3 +54,23 @@ export default new Router({
     }
   ]
 })
+
+// Set up global navigation guard
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!store.getters.isAuthenticated) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // make sure to always call next()!
+  }
+})
+
+export default router
