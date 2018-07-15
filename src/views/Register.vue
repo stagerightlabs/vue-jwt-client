@@ -10,7 +10,7 @@
         </div>
         <div class="md:w-2/3">
           <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-full-name" type="text" v-model="registration.name">
-          <p class="text-red text-sm mt-1" v-if="hasError('name')">{{ getErrorMessage('name') }}</p>
+          <p class="text-red text-sm mt-1" v-if="hasValidationError('name')">{{ getValidationError('name') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline mb-6">
@@ -21,7 +21,7 @@
         </div>
         <div class="md:w-2/3">
           <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-full-name" type="email" v-model="registration.email">
-          <p class="text-red text-sm mt-1" v-if="hasError('email')">{{ getErrorMessage('email') }}</p>
+          <p class="text-red text-sm mt-1" v-if="hasValidationError('email')">{{ getValidationError('email') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline mb-6">
@@ -32,7 +32,7 @@
         </div>
         <div class="md:w-2/3">
           <input class="bg-grey-lighter appearance-none border-2 border-grey-lighter hover:border-purple rounded w-full py-2 px-4 text-grey-darker" id="inline-username" type="password" v-model="registration.password">
-          <p class="text-red text-sm mt-1" v-if="hasError('password')">{{ getErrorMessage('password') }}</p>
+          <p class="text-red text-sm mt-1" v-if="hasValidationError('password')">{{ getValidationError('password') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline mb-6">
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import axios from '@/axios'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -70,13 +70,12 @@ export default {
         email: '',
         password: '',
         password_confirmation: ''
-      },
-      errors: {}
+      }
     }
   },
   methods: {
     register () {
-      this.clearErrors()
+      this.clearFormErrors()
       this.$store.dispatch('register', this.registration)
     },
     resetForm () {
@@ -87,15 +86,15 @@ export default {
         password_confirmation: ''
       }
     },
-    hasError (key) {
-      return Object.prototype.hasOwnProperty.call(this.errors, key)
-    },
-    getErrorMessage (key) {
-      return this.hasError(key) ? this.errors[key][0] : null
-    },
-    clearErrors () {
-      this.errors = {}
-    }
+    ...mapMutations([
+      'clearFormErrors'
+    ])
+  },
+  computed: {
+    ...mapGetters([
+      'hasValidationError',
+      'getValidationError'
+    ])
   }
 }
 </script>

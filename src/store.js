@@ -1,15 +1,16 @@
 import Vue from 'vue'
+import bus from '@/bus'
 import Vuex from 'vuex'
 import axios from '@/axios'
 import router from '@/router'
-// import EventBus from '@/event-bus'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     jsonWebToken: null,
-    userEmail: null
+    userEmail: null,
+    formErrors: {}
   },
   mutations: {
     setAuthCredentials (state, authData) {
@@ -19,6 +20,12 @@ export default new Vuex.Store({
     clearAuthCredentials (state) {
       state.jsonWebToken = null
       state.userId = null
+    },
+    setFormErrors (state, errors) {
+      state.formErrors = errors
+    },
+    clearFormErrors (state) {
+      state.formErrors = {}
     }
   },
   actions: {
@@ -44,12 +51,10 @@ export default new Vuex.Store({
 
           router.push({ name: 'Dashboard' })
         })
-        .catch(() => {
-          // if (Object.prototype.hasOwnProperty.call(error.response.data, 'message')) {
-          //   EventBus.$emit('flash', error.response.data.message, 'danger')
-          // } else {
-          //   console.log(error.response)
-          // }
+        .catch((error) => {
+          if (Object.prototype.hasOwnProperty.call(error.response.data, 'message')) {
+            bus.$emit('flash', error.response.data.message, 'danger')
+          }
         })
     },
     tryAutoLogin ({ commit }) {
@@ -73,6 +78,7 @@ export default new Vuex.Store({
     },
     logout ({ commit }) {
       commit('clearAuthCredentials')
+      bus.$emit('flash', 'Goodbye! Your session has ended.', 'success')
       localStorage.removeItem('auth_token')
       localStorage.removeItem('auth_email')
       localStorage.removeItem('auth_expiration')
@@ -96,10 +102,14 @@ export default new Vuex.Store({
           userEmail: response.data.auth_email
         })
         dispatch('setLogoutTimer', response.data.expires_in)
+        bus.$emit('flash', 'Registration complete; you have been signed in.', 'success')
 
         router.push({ name: 'Dashboard' })
       }).catch((error) => {
-        console.log(error)
+        console.log(error.response.data)
+        if (Object.prototype.hasOwnProperty.call(error.response.data, 'errors')) {
+          commit('setFormErrors', error.response.data.errors)
+        }
       })
     }
   },
@@ -112,6 +122,12 @@ export default new Vuex.Store({
     },
     userEmail (state) {
       return state.email
+    },
+    hasValidationError: (state) => (input) => {
+      return Object.prototype.hasOwnProperty.call(state.formErrors, input)
+    },
+    getValidationError: (state) => (input) => {
+      return Object.prototype.hasOwnProperty.call(state.formErrors, input) ? state.formErrors[input][0] : null
     }
   }
 })
