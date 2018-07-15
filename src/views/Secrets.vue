@@ -13,24 +13,19 @@ import axios from '@/axios'
 export default {
   data () {
     return {
-      auth: window.authority,
-      apiUrl: process.env.API_URL,
       codewords: []
     }
   },
   methods: {
     fetchCodeWords () {
-      let self = this
-      axios.get(this.apiUrl + '/api/secrets', {
-        headers: this.auth.header()
-      })
-        .then(function (response) {
-          self.codewords = response.data.codewords
+      axios.get('/api/secrets')
+        .then((response) => {
+          this.codewords = response.data.codewords
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error)
           if (error.response.data.hasOwnProperty('message')) {
-            window.flash(error.response.data.message, 'danger')
+            // window.flash(error.response.data.message, 'danger')
           }
         })
     }
