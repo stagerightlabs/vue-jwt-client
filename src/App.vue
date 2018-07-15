@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import axios from '@/axios.js'
 import FlashStack from '@/components/FlashStack.vue'
 
 export default {
@@ -82,20 +81,7 @@ export default {
   },
   methods: {
     logout () {
-      let self = this
-      axios.post(this.apiUrl + '/api/logout', {}, {
-        // headers: authority.header()
-      })
-        .then(response => {
-          // authority.logout()
-          window.flash('Your session has been terminated.', 'success')
-          self.$router.push({name: 'Login'})
-        })
-        .catch(error => {
-          console.log(error)
-          // authority.logout()
-          window.flash('Your session has been terminated.', 'success')
-        })
+      this.$store.dispatch('logout')
     }
   }
 }
