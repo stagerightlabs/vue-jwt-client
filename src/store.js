@@ -77,6 +77,30 @@ export default new Vuex.Store({
       localStorage.removeItem('auth_email')
       localStorage.removeItem('auth_expiration')
       router.push({ name: 'Login' })
+    },
+    register ({ commit, dispatch }, registration) {
+      axios.post('api/register', {
+        name: registration.name,
+        email: registration.email,
+        password: registration.password,
+        password_confirmation: registration.password_confirmation
+      }).then(response => {
+        const now = new Date()
+        const expirationDate = new Date(now.getTime() + (response.data.expires_in * 1000))
+        localStorage.setItem('auth_token', response.data.access_token)
+        localStorage.setItem('auth_email', response.data.auth_email)
+        localStorage.setItem('auth_expiration', expirationDate)
+
+        commit('setAuthCredentials', {
+          token: response.data.access_token,
+          userEmail: response.data.auth_email
+        })
+        dispatch('setLogoutTimer', response.data.expires_in)
+
+        router.push({ name: 'Dashboard' })
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   },
   getters: {
