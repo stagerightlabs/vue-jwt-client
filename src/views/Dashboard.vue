@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import bus from '@/bus'
+
 export default {
   data () {
     return {
@@ -21,7 +23,7 @@ export default {
   },
   methods: {
     alert (message, level) {
-      // window.flash(message, level)
+      bus.$emit('flash', message, level)
     }
   }
 }

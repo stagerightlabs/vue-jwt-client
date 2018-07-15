@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import FlashMessage from './FlashMessage.vue'
+import bus from '@/bus'
+import FlashMessage from '@/components/FlashMessage.vue'
 
 export default {
   components: {
@@ -54,9 +55,9 @@ export default {
     }
   },
   created () {
-    // EventBus.$on('flash', (message, level) => {
-    //   this.flash(message, level)
-    // })
+    bus.$on('flash', (message, level) => {
+      this.flash(message, level)
+    })
   }
 }
 </script>
