@@ -7,7 +7,7 @@
       :level="alert.level"
       :nonce="alert.nonce"
       :key="alert.nonce"
-      :delay=6000
+      :delay=3000
       v-on:remove="remove"
     ></flash>
     </transition-group>
