@@ -29,6 +29,7 @@
             class="bg-grey-lighter appearance-none border-2 border-grey-lighter focus:border-purple rounded w-full py-2 px-4 text-grey-darker"
             id="inline-username"
             type="password"
+            @keydown.enter.prevent="login"
             v-model="credentials.password"
           >
         </div>
