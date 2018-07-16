@@ -72,6 +72,9 @@ router.beforeEach((to, from, next) => {
   } else {
     next() // make sure to always call next()!
   }
+
+  // Clear form errors on every page change
+  store.commit('clearFormErrors')
 })
 
 export default router
