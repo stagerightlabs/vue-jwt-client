@@ -39,7 +39,7 @@
         </div>
         <div v-else>
           <span class="text-white">{{ userEmail }}</span>
-          <button class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 ml-2 lg:mt-0" @click="logout">Log Out</button>
+          <button class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-purple hover:bg-white mt-4 ml-2 lg:mt-0" @click="logout">Log Out</button>
         </div>
       </div>
     </nav>
