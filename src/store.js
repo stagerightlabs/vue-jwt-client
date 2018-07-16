@@ -50,15 +50,7 @@ export default new Vuex.Store({
           dispatch('setLogoutTimer', response.data.expires_in)
 
           router.push({ name: 'Dashboard' })
-        })
-        .catch((error) => {
-          if (Object.prototype.hasOwnProperty.call(error.response.data, 'message')) {
-            bus.$emit('flash', error.response.data.message, 'danger')
-          }
-          if (Object.prototype.hasOwnProperty.call(error.response.data, 'errors')) {
-            commit('setFormErrors', error.response.data.errors)
-          }
-        })
+        }).catch(() => {}) // See axios config for basic error handling
     },
     tryAutoLogin ({ commit }) {
       const jwt = localStorage.getItem('auth_token')
@@ -108,12 +100,7 @@ export default new Vuex.Store({
         bus.$emit('flash', 'Registration complete; you have been signed in.', 'success')
 
         router.push({ name: 'Dashboard' })
-      }).catch((error) => {
-        console.log(error.response.data)
-        if (Object.prototype.hasOwnProperty.call(error.response.data, 'errors')) {
-          commit('setFormErrors', error.response.data.errors)
-        }
-      })
+      }).catch(() => {}) // See axios config for basic error handling
     }
   },
   getters: {
