@@ -117,7 +117,13 @@ export default new Vuex.Store({
       return Object.prototype.hasOwnProperty.call(state.formErrors, input)
     },
     getValidationError: (state) => (input) => {
-      return Object.prototype.hasOwnProperty.call(state.formErrors, input) ? state.formErrors[input][0] : null
+      if (Object.prototype.hasOwnProperty.call(state.formErrors, input)) {
+        const error = state.formErrors[input]
+
+        return Array.isArray(error) ? error[0] : error
+      }
+
+      return null
     }
   }
 })
