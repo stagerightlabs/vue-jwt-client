@@ -15,7 +15,7 @@
             type="email"
             v-model="email"
           >
-          <p class="text-red text-sm mt-1" v-if="hasError('email')">{{ getErrorMessage('email') }}</p>
+          <p class="text-red text-sm mt-1" v-if="hasValidationError('email')">{{ getValidationError('email') }}</p>
         </div>
       </div>
       <div class="md:flex md:items-baseline">
@@ -33,50 +33,37 @@
 </template>
 
 <script>
+import bus from '@/bus'
 import axios from '@/axios'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   data () {
     return {
-      email: '',
-      errors: {}
+      email: ''
     }
   },
   methods: {
     sendRequest () {
-      let self = this
-
-      if (this.email.length === 0) {
-        window.flash('You must provide an email address', 'danger')
-        return
-      }
-
-      axios.post(this.apiUrl + '/api/password/email', {
-        email: self.email
+      this.clearFormErrors()
+      axios.post('/api/password/email', {
+        email: this.email
+      }).then(() => {
+        this.$router.push({name: 'Login'})
+        bus.$emit('flash', 'If we find an account for that email address, a reset link will be sent.', 'success')
+      }).catch(() => {
+        // see axios configuration
       })
-        .then(function (response) {
-
-        })
-        .catch(function (error) {
-          console.log(error)
-          if (error.response.hasOwnProperty('data')) {
-            this.errors = error.response.data.errors
-          }
-        })
-        .finally(function () {
-          self.$router.push({name: 'Login'})
-          window.flash('A reset link has sent to your email account.', 'success')
-        })
     },
-    hasError (key) {
-      return Object.prototype.hasOwnProperty.call(this.errors, key)
-    },
-    getErrorMessage (key) {
-      return this.hasError(key) ? this.errors[key][0] : null
-    },
-    clearErrors () {
-      this.errors = {}
-    }
+    ...mapMutations([
+      'clearFormErrors'
+    ])
+  },
+  computed: {
+    ...mapGetters([
+      'hasValidationError',
+      'getValidationError'
+    ])
   }
 }
 </script>
