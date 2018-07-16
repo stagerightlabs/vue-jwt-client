@@ -22,9 +22,6 @@ customized.interceptors.request.use((config) => {
   // Do something with request error
 }, error => Promise.reject(error))
 
-// Enable the "finally" method
-require('promise.prototype.finally').shim()
-
 // Set up a response interceptor to redirect on 401 responses
 // Add a response interceptor
 customized.interceptors.response.use(response => response, (error) => {
