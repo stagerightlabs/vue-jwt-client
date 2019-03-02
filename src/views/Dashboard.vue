@@ -1,8 +1,7 @@
 <template>
   <div>
     <h1>Dashboard</h1>
-    <p class="text-center">Hello, {{ userEmail }}.</p>
-    <p class="text-center">You are logged in.</p>
+    <p class="text-center">Hello {{ userName }}, you are logged in.</p>
     <p class="w-full text-center my-8">
       <a
         class="bg-grey-dark hover:bg-grey-darker text-white font-bold py-2 px-4 m-2 rounded cursor-pointer"
@@ -26,7 +25,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userEmail'
+      'userName'
     ])
   },
   methods: {

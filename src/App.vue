@@ -46,7 +46,7 @@
     <div class="p-8 flex-auto">
       <router-view/>
     </div>
-    <div class="p-4 bg-grey-lighter">
+    <div class="p-4 bg-grey-lighter" v-if="token">
       <h5 class="mb-1">JSON Web Token</h5>
       <pre class="whitespace-pre-wrap break-words">{{ token }}</pre>
     </div>
