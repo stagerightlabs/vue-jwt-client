@@ -10,22 +10,33 @@ export default new Vuex.Store({
   state: {
     jsonWebToken: null,
     userEmail: null,
+    userName: null,
     formErrors: {}
   },
   mutations: {
     setAuthCredentials (state, authData) {
       state.jsonWebToken = authData.token
-      state.userEmail = authData.userEmail
     },
     clearAuthCredentials (state) {
       state.jsonWebToken = null
-      state.userId = null
     },
     setFormErrors (state, errors) {
       state.formErrors = errors
     },
     clearFormErrors (state) {
       state.formErrors = {}
+    },
+    setUserEmail (state, email) {
+      state.userEmail = email
+    },
+    clearUserEmail (state) {
+      state.userEmail = null
+    },
+    setUserName (state, name) {
+      state.userName = name
+    },
+    clearUserName (state) {
+      state.userName = null
     }
   },
   actions: {
@@ -37,15 +48,14 @@ export default new Vuex.Store({
     login ({ commit, dispatch }, credentials) {
       axios.post('api/login', { email: credentials.email, password: credentials.password })
         .then((response) => {
+          dispatch('getUser')
           const now = new Date()
           const expirationDate = new Date(now.getTime() + (response.data.expires_in * 1000))
           localStorage.setItem('auth_token', response.data.access_token)
-          localStorage.setItem('auth_email', response.data.auth_email)
           localStorage.setItem('auth_expiration', expirationDate)
 
           commit('setAuthCredentials', {
-            token: response.data.access_token,
-            userEmail: response.data.auth_email
+            token: response.data.access_token
           })
           dispatch('setLogoutTimer', response.data.expires_in)
 
@@ -61,21 +71,20 @@ export default new Vuex.Store({
       const now = new Date()
       if (now >= expirationDate) {
         localStorage.removeItem('auth_token')
-        localStorage.removeItem('auth_email')
         localStorage.removeItem('auth_expiration')
         commit('clearAuthCredentials')
         return
       }
       commit('setAuthCredentials', {
-        token: jwt,
-        userEmail: localStorage.getItem('auth_email')
+        token: jwt
       })
     },
     logout ({ commit }) {
       commit('clearAuthCredentials')
+      commit('clearUserEmail')
+      commit('clearUserName')
       bus.$emit('flash', 'Goodbye! Your session has ended.', 'success')
       localStorage.removeItem('auth_token')
-      localStorage.removeItem('auth_email')
       localStorage.removeItem('auth_expiration')
       router.push({ name: 'Login' })
     },
@@ -89,18 +98,27 @@ export default new Vuex.Store({
         const now = new Date()
         const expirationDate = new Date(now.getTime() + (response.data.expires_in * 1000))
         localStorage.setItem('auth_token', response.data.access_token)
-        localStorage.setItem('auth_email', response.data.auth_email)
         localStorage.setItem('auth_expiration', expirationDate)
 
         commit('setAuthCredentials', {
-          token: response.data.access_token,
-          userEmail: response.data.auth_email
+          token: response.data.access_token
         })
         dispatch('setLogoutTimer', response.data.expires_in)
+        dispatch('getUser')
         bus.$emit('flash', 'Registration complete; you have been signed in.', 'success')
 
         router.push({ name: 'Dashboard' })
       }).catch(() => {}) // See axios config for basic error handling
+    },
+    getUser ({ commit }) {
+      axios.get('api/user')
+        .then((response) => {
+          commit('setUserEmail', response.data.email)
+          commit('setUserName', response.data.name)
+        })
+        .catch(() => {
+          bus.$emit('flash', 'I could not retrieve your user profile from the server.', 'danger')
+        })
     }
   },
   getters: {
@@ -112,6 +130,9 @@ export default new Vuex.Store({
     },
     userEmail (state) {
       return state.userEmail
+    },
+    userName (state) {
+      return state.userName
     },
     hasValidationError: (state) => (input) => {
       return Object.prototype.hasOwnProperty.call(state.formErrors, input)
